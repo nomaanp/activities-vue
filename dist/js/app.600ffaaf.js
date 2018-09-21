@@ -401,7 +401,7 @@
     var N = M.exports,
       p = i("bc3a"),
       D = i.n(p),
-      b = "https://13.232.178.10/api/op.student",
+      b = "http://13.232.178.10/api/op.student",
       g = "cd896da1bc80baa14cac2347818612bd92ca67f3",
       I = {
         name: "App",
