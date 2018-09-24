@@ -19,7 +19,7 @@
     </section> -->
     <div class="timeline mt-4">
         <div v-for="point in timelineData" class="timeline-group">
-          <h2>{{ point.date | formatDate('DD MMMM, YYYY')}}</h2>
+          <h2 class="background"><span>{{ point.date | formatDate('DD MMMM, YYYY')}}</span></h2>
           <div v-for="message in point.messages" class="timeline-event">
               <v-layout row wrap>
                 <v-flex xs6 pa-4>
@@ -63,13 +63,30 @@
 <style scoped>
   .timeline {
   position: relative;
-  width: 90%;
   margin: 0 auto;
-  border: 1px solid green;
 }
 
 .timeline .timeline-group h2 {
   text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline .timeline-group h2.background::before{
+    border-top: 2px solid #dfdfdf;
+    content: "";
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 95%;
+    z-index: -1;
+}
+.timeline .timeline-group h2.background span {
+  background: #fafafa;
+    padding: 0 15px;
 }
 
 .timeline .timeline-event {
