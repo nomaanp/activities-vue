@@ -1,8 +1,8 @@
 <template>
-    <section class="timeline-container timeline">
+    <!-- <section class="timeline-container timeline">
         <div v-for="point in timelineData" class="timeline-block">
             <div class="timeline-img" :class="['timeline-img',point.pointColor===undefined?'red':point.pointColor]">
-                <!-- <img v-if="point.img" v-bind:src="'data:image/jpeg;base64,'+point.img" alt=""> -->
+                <img v-if="point.img" v-bind:src="'data:image/jpeg;base64,'+point.img" alt="">
                 <v-list-tile-avatar 
                 v-if="point.checked"
                 >
@@ -15,258 +15,155 @@
                 <div v-html="point.text"></div>
                 <span v-if="point.date" class="date" v-text="point.date"></span>
             </div>
-            </div>
-    </section>
+          </div>
+    </section> -->
+    <div class="timeline mt-4">
+        <div v-for="point in timelineData" class="timeline-group">
+          <h2>{{ point.date | formatDate('DD MMMM, YYYY')}}</h2>
+          <div v-for="message in point.messages" class="timeline-event">
+              <v-layout row wrap>
+                <v-flex xs6 pa-4>
+                  <v-card>
+                    <v-card-text class="text-xs-right">
+                      {{ message.date | formatTime('h:mm A')}}
+                    </v-card-text>
+                  </v-card>
+                </v-flex>
+                <v-flex xs6 pa-4>
+                  <v-card>
+                     <v-flex  
+                      xs12
+                      sm6
+                      md8
+                      pl-2
+                      align-center
+                      layout>
+                       <v-avatar
+                      v-if="message.img"
+                      color="grey lighten-4"
+                    >
+                      <img v-bind:src="'data:image/jpeg;base64,'+message.img" alt="avatar">
+                    </v-avatar>
+                    <v-card-title primary-title>
+                      <div>
+                        <h3 class="headline mb-0" v-text="message.title"></h3>
+                        <div v-html="message.text"></div>
+                      </div>
+                    </v-card-title>
+                     </v-flex>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            <div class="timeline-badge blue white-text"></div>
+          </div>
+        </div>   
+      </div>
 </template>
 
 <style scoped>
-  .timeline-container {
-    /* this class is used to give a max-width to the element it is applied to, and center it horizontally when it reaches that max-width */
-    width: 90%;
-    max-width: 1170px;
-    margin: 0 auto;
-  }
-  .timeline-container::after {
-    /* clearfix */
-    content: '';
-    display: table;
-    clear: both;
-  }
-  /* --------------------------------
-  Main components
-  -------------------------------- */
   .timeline {
-    position: relative;
-    padding: 2em 0;
-    margin-top: 2em;
-    margin-bottom: 2em;
+  position: relative;
+  width: 90%;
+  margin: 0 auto;
+  border: 1px solid green;
+}
+
+.timeline .timeline-group h2 {
+  text-align: center;
+}
+
+.timeline .timeline-event {
+  position: relative;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.timeline .timeline-event .timeline-content {
+  position: relative;
+  width: calc(50% - 50px);
+}
+
+.timeline .timeline-event::before {
+  display: block;
+  content: "";
+  width: 2px;
+  height: calc(50% - 0px);
+  position: absolute;
+  background: #d2d2d2;
+  left: calc(50% - 1px);
+  top: 0;
+}
+
+.timeline .timeline-event::after {
+  display: block;
+  content: "";
+  width: 2px;
+  height: calc(50% - 0px);
+  position: absolute;
+  background: #d2d2d2;
+  left: calc(50% - 1px);
+  top: calc(50% + 10px);
+}
+
+.timeline .timeline-event:first-child::before {
+  display: none;
+}
+
+.timeline .timeline-event:last-child::after {
+  display: none;
+}
+
+/* .timeline .timeline-event:nth-child(even) .timeline-content {
+  margin-left: calc(50% + 50px);
+}
+
+.timeline .timeline-event:nth-child(odd) .timeline-content {
+  margin-left: 0;
+} */
+
+.timeline .timeline-badge {
+  display: block;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #d2d2d2;
+  top: calc(50% - 10px);
+  right: calc(50% - 10px);
+  border-radius: 50%;
+  text-align: center;
+  cursor: default;
+}
+
+.timeline .timeline-badge i {
+  font-size: 25px;
+  line-height: 40px;
+}
+
+@media (max-width: 600px) {
+  .timeline .timeline-event .timeline-content {
+    width: calc(100% - 70px);
   }
-  .timeline::before {
-    /* this is the vertical line */
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 18px;
-    height: 100%;
-    width: 4px;
-    background: #d7e4ed;
+  .timeline .timeline-event::before {
+    /* left: 19px; */
   }
-  @media only screen and (min-width: 1170px) {
-    .timeline {
-      margin-top: 3em;
-      margin-bottom: 3em;
-    }
-    .timeline::before {
-      left: 50%;
-      margin-left: -2px;
-    }
+  .timeline .timeline-event::after {
+    /* left: 19px; */
   }
-  .timeline-block {
-    position: relative;
-    margin: 2em 0;
+  .timeline .timeline-event:nth-child(even) .timeline-content {
+    margin-left: 70px;
   }
-  .timeline-block:after {
-    content: "";
-    display: table;
-    clear: both;
+  .timeline .timeline-event:nth-child(odd) .timeline-content {
+    margin-left: 70px;
   }
-  .timeline-block:first-child {
-    margin-top: 0;
+  .timeline .timeline-badge {
+    /* left: 0; */
   }
-  .timeline-block:last-child {
-    margin-bottom: 0;
-  }
-  @media only screen and (min-width: 1170px) {
-    .timeline-block {
-      margin: 4em 0;
-    }
-    .timeline-block:first-child {
-      margin-top: 0;
-    }
-    .timeline-block:last-child {
-      margin-bottom: 0;
-    }
-  }
-  .timeline-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    box-shadow: 0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
-  }
-  .timeline-img img {
-    display: block;
-    /* width: 24px;
-    height: 24px; */
-    position: relative;
-    /* left: 50%;
-    top: 50%;
-    margin-left: -12px;
-    margin-top: -12px; */
-  }
-  .timeline-img.green {
-    background: #75ce66;
-  }
-  .timeline-img.red {
-    background: #c03b44;
-  }
-  .timeline-img.yellow {
-    background: #f0ca45;
-  }
-  @media only screen and (min-width: 1170px) {
-    .timeline-img {
-      width: 60px;
-      height: 60px;
-      left: 50%;
-      margin-left: -30px;
-      /* Force Hardware Acceleration in WebKit */
-      -webkit-transform: translateZ(0);
-      -webkit-backface-visibility: hidden;
-    }
-    .cssanimations .timeline-img.is-hidden {
-      visibility: hidden;
-    }
-    .cssanimations .timeline-img.bounce-in {
-      visibility: visible;
-      -webkit-animation: bounce-1 0.6s;
-      -moz-animation: bounce-1 0.6s;
-      animation: bounce-1 0.6s;
-    }
-  }
-  .timeline-content {
-    position: relative;
-    margin-left: 60px;
-    background: white;
-    border-radius: 0.25em;
-    padding: 1em;
-    box-shadow: 0 3px 0 #d7e4ed;
-  }
-  .timeline-content:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-  .timeline-content h2 {
-    color: #303e49;
-  }
-  .timeline-content p, .timeline-content .read-more, .timeline-content .date {
-    font-size: 13px;
-    font-size: 0.8125rem;
-  }
-  .timeline-content .read-more, .timeline-content .date {
-    display: inline-block;
-  }
-  .timeline-content p {
-    margin: 1em 0;
-    line-height: 1.6;
-  }
-  .timeline-content .read-more {
-    float: right;
-    padding: .8em 1em;
-    background: #acb7c0;
-    color: white;
-    border-radius: 0.25em;
-  }
-  .no-touch .timeline-content .read-more:hover {
-    background-color: #bac4cb;
-  }
-  a.read-more:hover {
-    text-decoration: none;
-    background-color: #424242;
-  }
-  .timeline-content .date {
-    float: left;
-    padding: .8em 0;
-    opacity: .7;
-  }
-  .timeline-content::before {
-    content: '';
-    position: absolute;
-    top: 16px;
-    right: 100%;
-    height: 0;
-    width: 0;
-    border: 7px solid transparent;
-    border-right: 7px solid white;
-  }
-  @media only screen and (min-width: 768px) {
-    .timeline-content h2 {
-      font-size: 20px;
-      font-size: 1.25rem;
-    }
-    .timeline-content p {
-      font-size: 16px;
-      font-size: 1rem;
-    }
-    .timeline-content .read-more, .timeline-content .date {
-      font-size: 14px;
-      font-size: 0.875rem;
-    }
-  }
-  @media only screen and (min-width: 1170px) {
-    .timeline-content {
-      margin-left: 0;
-      padding: 1.6em;
-      width: 45%;
-    }
-    .timeline-content::before {
-      top: 24px;
-      left: 100%;
-      border-color: transparent;
-      border-left-color: white;
-    }
-    .timeline-content .read-more {
-      float: left;
-    }
-    .timeline-content .date {
-      position: absolute;
-      width: 100%;
-      left: 122%;
-      top: 6px;
-      font-size: 16px;
-      font-size: 1rem;
-    }
-    .timeline-block:nth-child(even) .timeline-content {
-      float: right;
-    }
-    .timeline-block:nth-child(even) .timeline-content::before {
-      top: 24px;
-      left: auto;
-      right: 100%;
-      border-color: transparent;
-      border-right-color: white;
-    }
-    .timeline-block:nth-child(even) .timeline-content .read-more {
-      float: right;
-    }
-    .timeline-block:nth-child(even) .timeline-content .date {
-      left: auto;
-      right: 122%;
-      text-align: right;
-    }
-    .cssanimations .timeline-content.is-hidden {
-      visibility: hidden;
-    }
-    .cssanimations .timeline-content.bounce-in {
-      visibility: visible;
-      -webkit-animation: bounce-2 0.6s;
-      -moz-animation: bounce-2 0.6s;
-      animation: bounce-2 0.6s;
-    }
-  }
-  @media only screen and (min-width: 1170px) {
-    /* inverse bounce effect on even content blocks */
-    .cssanimations .timeline-block:nth-child(even) .timeline-content.bounce-in {
-      -webkit-animation: bounce-2-inverse 0.6s;
-      -moz-animation: bounce-2-inverse 0.6s;
-      animation: bounce-2-inverse 0.6s;
-    }
-  }
+}
 </style>
 
 <script>
+  import moment from 'moment';
+
   export default{
     props: {
       timelineData: {
@@ -287,6 +184,23 @@
           return imgurl
         } else {
           return this.defaultImg
+        }
+      }
+    },
+    filters: {
+      formatDate: function(value, format) {
+        if (value) {
+          var date = moment(String(value));
+          if(moment().diff(date, 'days') >= 1) {
+            return moment(String(value)).format(format);
+          }
+          return date.calendar().split(' ')[0] + ', ' + moment(String(value)).format(format);
+        }
+      },
+      formatTime: function(value, format) {
+        if (value) {
+          var date = moment(String(value));
+          return moment(String(value)).format(format);
         }
       }
     }
