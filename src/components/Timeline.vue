@@ -23,7 +23,7 @@
           <div v-for="message in point.messages" class="timeline-event">
               <v-layout row wrap>
                 <v-flex xs6 pa-4>
-                  <v-card>
+                  <v-card class="transparent mt-3">
                     <v-card-text class="text-xs-right">
                       {{ message.date | formatTime('h:mm A')}}
                     </v-card-text>
@@ -65,7 +65,12 @@
   position: relative;
   margin: 0 auto;
 }
-
+.transparent {
+  background-color: white!important;
+   opacity: 0.65;
+   border-color: transparent!important;
+  box-shadow: none;
+}
 .timeline .timeline-group h2 {
   text-align: center;
   position: relative;
@@ -137,7 +142,9 @@
 .timeline .timeline-event:nth-child(odd) .timeline-content {
   margin-left: 0;
 } */
-
+.timeline .headline {
+      color: #1976d2 !important;
+}
 .timeline .timeline-badge {
   display: block;
   position: absolute;
